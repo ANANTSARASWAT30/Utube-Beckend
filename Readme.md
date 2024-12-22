@@ -82,8 +82,8 @@ project-directory
 │   │   ├── asyncHandler.js              # Wrapper for async functions
 │   │   └── cloudinary.js                # Cloudinary integration
 │   ├── app.js                           # Express app setup
-│   ├── constants.js                        # MongoDB connection setup
-│   ├── index.js                 # Application-wide constants
+│   ├── constants.js                     # MongoDB connection setup
+│   ├── index.js                         # Application-wide constants
 ├── .env                                 # Environment variables
 ├── package.json                         # Project dependencies
 ├── .gitignore                           # Files to ignore in Git
