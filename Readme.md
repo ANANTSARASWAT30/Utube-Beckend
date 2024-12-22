@@ -1,31 +1,42 @@
-# **Node.js User Management and Video API**
+# **Node.js Video Streaming and Social Interaction API**
 
-This project is a RESTful API built with **Node.js** and **MongoDB**. It supports user authentication, video management, and secure token-based access using **JWT (JSON Web Tokens)**. The application integrates **Cloudinary** for image and video uploads and includes advanced features like token refresh, user watch history, and more.
+This project is a comprehensive RESTful API built with **Node.js** and **MongoDB**, offering features for video streaming, user management, social interactions (like comments, likes, and tweets), and subscription handling. The application includes secure authentication mechanisms using **JWT**, integrates **Cloudinary** for media storage, and ensures scalability and maintainability with its modular architecture.
 
 ---
 
 ## **Features**
 
-- **User Management**:  
-  - Registration with avatar and cover image uploads.  
-  - Login with email or username.  
-  - Secure authentication using JWT (access and refresh tokens).  
-  - Token refresh mechanism for session management.  
-  - Logout functionality with cookie clearance.  
+### **Video Management**
+- Upload, retrieve, update, and delete videos with metadata.
+- Manage video visibility (publish/unpublish).
+- Track watch history for users.
 
-- **Video Management**:  
-  - Upload videos and thumbnails to Cloudinary.  
-  - Store video metadata (title, description, duration).  
-  - Video ownership tracking.  
+### **User Management**
+- Register, login, logout, and update account details.
+- Change passwords securely.
+- Manage user avatars and cover images.
+- Fetch user channel profiles with subscription details.
 
-- **Security**:  
-  - Password hashing with **bcrypt**.  
-  - Secure cookie storage for tokens.  
-  - Expiry-based token validation.  
+### **Social Interactions**
+- Like and unlike videos, comments, and tweets.
+- Add, update, and delete comments on videos.
+- Create, retrieve, update, and delete tweets.
 
-- **Scalability**:  
-  - Modular architecture for controllers, models, routes, and utilities.  
-  - MongoDB aggregation with pagination.  
+### **Subscriptions**
+- Subscribe to channels and manage subscriptions.
+- Retrieve lists of subscribers and subscribed channels.
+
+### **Playlists**
+- Create, update, and delete playlists.
+- Add and remove videos from playlists.
+- Fetch user-specific playlists and their details.
+
+### **Dashboard and Analytics**
+- Fetch channel statistics (total views, subscribers, videos, likes).
+- Retrieve all videos uploaded by a user.
+
+### **Health Check**
+- Simple endpoint to verify the health of the API.
 
 ---
 
@@ -35,65 +46,83 @@ This project is a RESTful API built with **Node.js** and **MongoDB**. It support
 project-directory
 ├── src
 │   ├── controllers
-│   │   ├── user.controller.js        # Handles user operations
-│   │   └── video.controller.js       # Handles video operations
-│   ├── models
-│   │   ├── user.model.js             # User schema and methods
-│   │   └── video.model.js            # Video schema and methods
-│   ├── routes
-│   │   ├── user.routes.js            # Routes for user-related operations
-│   │   └── video.routes.js           # Routes for video-related operations
+│   │   ├── comment.controller.js        # Handles comment operations
+│   │   ├── dashboard.controller.js      # Handles dashboard analytics
+│   │   ├── healthcheck.controller.js    # Healthcheck endpoint
+│   │   ├── like.controller.js           # Handles like/unlike operations
+│   │   ├── playlist.controller.js       # Manages playlists
+│   │   ├── subscription.controller.js   # Handles subscriptions
+│   │   ├── tweet.controller.js          # Manages tweets
+│   │   └── user.controller.js           # User account and profile operations
+│   ├── db
+│   │   ├── index.js 
 │   ├── middlewares
-│   │   ├── multer.middleware.js      # File upload handling
-│   │   └── auth.middleware.js        # Authentication middleware
+│   │   ├── auth.middleware.js           # JWT authentication middleware
+│   │   └── multer.middleware.js         # File upload handling
+│   ├── models
+│   │   ├── comment.model.js             # Comment schema
+│   │   ├── like.model.js                # Like schema
+│   │   ├── playlist.model.js            # Playlist schema
+│   │   ├── subscription.model.js        # Subscription schema
+│   │   ├── tweet.model.js               # Tweet schema
+│   │   ├── user.model.js                # User schema
+│   │   └── video.model.js               # Video schema
+│   ├── routes
+│   │   ├── comment.routes.js            # Comment-related routes
+│   │   ├── dashboard.routes.js          # Dashboard analytics routes
+│   │   ├── healthcheck.routes.js        # Healthcheck endpoint route
+│   │   ├── like.routes.js               # Like-related routes
+│   │   ├── playlist.routes.js           # Playlist-related routes
+│   │   ├── subscription.routes.js       # Subscription-related routes
+│   │   ├── tweet.routes.js              # Tweet-related routes
+│   │   └── user.routes.js               # User-related routes
 │   ├── utils
-│   │   ├── ApiResponse.js            # Response wrapper
-│   │   ├── ApiError.js               # Custom error handling
-│   │   ├── asyncHandler.js           # Async error handling
-│   │   └── cloudinary.js             # Cloudinary configuration
-│   ├── config
-│   │   └── db.js                     # MongoDB connection setup
-│   ├── app.js                        # Express app setup
-├── package.json                      # Project dependencies
-├── .env                              # Environment variables
-├── .gitignore                        # Files to ignore in Git
-└── README.md                         # Project documentation
+│   │   ├── ApiResponse.js               # Standardized API response
+│   │   ├── ApiError.js                  # Custom error handling
+│   │   ├── asyncHandler.js              # Wrapper for async functions
+│   │   └── cloudinary.js                # Cloudinary integration
+│   ├── app.js                           # Express app setup
+│   ├── constants.js                        # MongoDB connection setup
+│   ├── index.js                 # Application-wide constants
+├── .env                                 # Environment variables
+├── package.json                         # Project dependencies
+├── .gitignore                           # Files to ignore in Git
+├── README.md                            # Project documentation
+└── public                               # Public assets
 ```
 
 ---
 
 ## **Setup Instructions**
 
-### **1. Clone the repository**
+### **1. Clone the Repository**
 ```bash
 git clone <repository-url>
 cd project-directory
 ```
 
-### **2. Install dependencies**
+### **2. Install Dependencies**
 ```bash
 npm install
 ```
 
-### **3. Configure environment variables**
+### **3. Configure Environment Variables**
 - Create a `.env` file in the root directory.
 - Add the following variables:
 ```plaintext
 PORT=8000
 MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net
-CORS_ORIGIN=*
-
+CLOUDINARY_CLOUD_NAME=<your-cloudinary-cloud-name>
+CLOUDINARY_API_KEY=<your-cloudinary-api-key>
+CLOUDINARY_API_SECRET=<your-cloudinary-api-secret>
+ACCESS_TOKEN_SECRET=<your-access-token-secret>
 ACCESS_TOKEN_EXPIRY=1d
-ACCESS_TOKEN_SECRET=
-REFRESH_TOKEN_SECRET=
-REFRESH_TOKEN_EXPIRY=
-
-CLOUDINARY_CLOUD_NAME=dll6ruqj2
-CLOUDINARY_API_KEY=573812851338754
-CLOUDINARY_API_SECRET=gcMkfvLracADh2zQHV1H7g8vvJs
+REFRESH_TOKEN_SECRET=<your-refresh-token-secret>
+REFRESH_TOKEN_EXPIRY=10d
+CORS_ORIGIN=*
 ```
 
-### **4. Start the server**
+### **4. Start the Server**
 ```bash
 npm start
 ```
@@ -101,86 +130,72 @@ The API will run on `http://localhost:8000`.
 
 ---
 
-## **API Endpoints**
+## **Key Endpoints**
 
 ### **User Routes** (`/api/v1/users`)
-1. **Register a New User**  
-   **POST** `/register`  
-   - Body Parameters:
-     ```json
-     {
-       "fullName": "John Doe",
-       "email": "johndoe@example.com",
-       "username": "john_doe",
-       "password": "password123"
-     }
-     ```
-   - Requires `avatar` (image file) and `coverImage` (optional).
+- `POST /register`: Register a new user.
+- `POST /login`: Login a user.
+- `POST /logout`: Logout a user.
+- `PATCH /update-account`: Update account details.
+- `GET /current-user`: Fetch the current user's details.
+- `GET /c/:username`: Fetch a user's channel profile.
+- `GET /watch-history`: Retrieve a user's watch history.
 
-2. **Login User**  
-   **POST** `/login`  
-   - Body Parameters:
-     ```json
-     {
-       "email": "johndoe@example.com",
-       "password": "password123"
-     }
-     ```
+### **Video Routes** (`/api/v1/videos`)
+- `POST /`: Upload a new video.
+- `GET /`: Retrieve all videos with pagination and filters.
+- `GET /:videoId`: Get details of a specific video.
+- `PATCH /:videoId`: Update video details.
+- `DELETE /:videoId`: Delete a video.
+- `PATCH /toggle/publish/:videoId`: Toggle video publish status.
 
-3. **Logout User**  
-   **POST** `/logout`  
-   - Requires valid access token.
+### **Playlist Routes** (`/api/v1/playlists`)
+- `POST /`: Create a new playlist.
+- `GET /user/:userId`: Fetch all playlists of a user.
+- `GET /:playlistId`: Get details of a specific playlist.
+- `PATCH /:playlistId`: Update a playlist.
+- `DELETE /:playlistId`: Delete a playlist.
+- `PATCH /add/:videoId/:playlistId`: Add a video to a playlist.
+- `PATCH /remove/:videoId/:playlistId`: Remove a video from a playlist.
 
-4. **Refresh Access Token**  
-   **POST** `/refresh-token`  
-   - Requires valid refresh token.
+### **Comment Routes** (`/api/v1/comments`)
+- `GET /:videoId`: Retrieve all comments for a video.
+- `POST /:videoId`: Add a comment to a video.
+- `PATCH /c/:commentId`: Update a comment.
+- `DELETE /c/:commentId`: Delete a comment.
 
----
+### **Subscription Routes** (`/api/v1/subscriptions`)
+- `POST /c/:channelId`: Subscribe to or unsubscribe from a channel.
+- `GET /u/:subscriberId`: Retrieve a channel's subscribers.
+- `GET /c/:channelId`: Retrieve channels a user has subscribed to.
 
-### **Video Routes** (`/api/v1/videos`)  
-1. **Upload a Video**  
-   **POST** `/upload`  
-   - Body Parameters:
-     ```json
-     {
-       "title": "Sample Video",
-       "description": "A description of the video",
-       "duration": 300
-     }
-     ```
-   - Requires `videoFile` (file) and `thumbnail` (file).
+### **Like Routes** (`/api/v1/likes`)
+- `POST /toggle/v/:videoId`: Like/unlike a video.
+- `POST /toggle/c/:commentId`: Like/unlike a comment.
+- `POST /toggle/t/:tweetId`: Like/unlike a tweet.
+- `GET /videos`: Retrieve videos liked by the user.
 
-2. **Get All Videos**  
-   **GET** `/`  
-   - Query Parameters (optional): `page`, `limit`, `sort`.
+### **Dashboard Routes** (`/api/v1/dashboard`)
+- `GET /stats`: Fetch channel statistics.
+- `GET /videos`: Retrieve videos uploaded by a user.
 
----
+### **Tweet Routes** (`/api/v1/tweets`)
+- `POST /`: Create a tweet.
+- `GET /user/:userId`: Retrieve a user's tweets.
+- `PATCH /:tweetId`: Update a tweet.
+- `DELETE /:tweetId`: Delete a tweet.
 
-## **Deployment**
-
-1. **Prepare Environment**:
-   - Ensure `.env` is correctly configured for the production server.
-
-2. **Choose a Hosting Platform**:
-   - [Heroku](https://devcenter.heroku.com/articles/deploying-nodejs)
-   - [AWS](https://aws.amazon.com/elasticbeanstalk/)
-   - [Vercel](https://vercel.com/)
-
-3. **Run the application**:
-   ```bash
-   npm start
-   ```
+### **Healthcheck Route** (`/api/v1/healthcheck`)
+- `GET /`: Verify API health status.
 
 ---
 
 ## **Future Enhancements**
 
-- Add **video analytics** (e.g., views, likes).
-- Implement **user roles** (e.g., admin, viewer).
-- Add **commenting and social sharing** features for videos.
-- Extend API documentation with tools like **Swagger**.
-
----
+- Implement role-based access control (e.g., admin, user).
+- Add analytics for user engagement (e.g., most-liked videos, trending tweets).
+- Integrate a recommendation engine for videos.
+- Enhance API documentation using Swagger or Postman.
 
 
 
